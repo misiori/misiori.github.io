@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>misiori</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            min-height: 100%;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Patrick Hand', cursive;
+            display: flex;
+            justify-content: center;
+            padding: 4rem 2rem 3rem;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 640px;
+            display: flex;
+            flex-direction: column;
+            gap: 2.8rem;
+        }
+
+        /* Аватарка */
+        .avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 1rem;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px dashed rgba(255,255,255,0.2);
+            padding-bottom: 1.8rem;
+        }
+
+        .header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 3.4rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            line-height: 1;
+            margin-bottom: 0.8rem;
+        }
+
+        .header .intro {
+            font-size: 1.2rem;
+            color: #c8c8c8;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* Projects */
+        .projects {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        .projects-title {
+            font-family: 'Caveat', cursive;
+            font-size: 2.3rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+
+        .project {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border: 2px solid rgba(255,255,255,0.18);
+            border-radius: 18px;
+            padding: 1.4rem 1.7rem;
+            background: rgba(20, 20, 20, 0.55);
+            transition: border-color 0.2s ease, transform 0.15s ease, background 0.2s ease;
+        }
+
+        .project:hover {
+            border-color: #ffffff;
+            transform: translateY(-2px);
+            background: rgba(40, 40, 40, 0.65);
+        }
+
+        .project-title {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+            line-height: 1.1;
+        }
+
+        .project-desc {
+            font-size: 1.05rem;
+            color: #b0b0b0;
+            line-height: 1.5;
+        }
+
+        /* Skills */
+        .skills {
+            text-align: center;
+            border-top: 2px dashed rgba(255,255,255,0.2);
+            border-bottom: 2px dashed rgba(255,255,255,0.2);
+            padding: 2rem 0;
+        }
+
+        .skills-title {
+            font-family: 'Caveat', cursive;
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            line-height: 1;
+        }
+
+        .skills-category {
+            margin-bottom: 1.4rem;
+        }
+
+        .skills-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .skills-category-name {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #aaa;
+            margin-bottom: 0.4rem;
+            line-height: 1.2;
+        }
+
+        .skills-items {
+            font-size: 1.15rem;
+            color: #c8c8c8;
+            line-height: 2.2;
+        }
+
+        .skill-word {
+            position: relative;
+            display: inline-block;
+            color: #ffffff;
+            border-bottom: 2px dashed rgba(255,255,255,0.5);
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .skill-word:hover,
+        .skill-word.active {
+            color: #ffffff;
+            border-bottom-color: #ffffff;
+        }
+
+        .skill-tooltip {
+            position: absolute;
+            bottom: calc(100% + 0.6rem);
+            left: 50%;
+            transform: translateX(-50%) translateY(6px);
+            background: #ffffff;
+            color: #000000;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 0.95rem;
+            line-height: 1.3;
+            padding: 0.4rem 0.9rem;
+            border-radius: 100px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 10;
+        }
+
+        .skill-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #ffffff;
+        }
+
+        .skill-word.active .skill-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Favorite song */
+        .favorite-song {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .favorite-song-title {
+            font-family: 'Caveat', cursive;
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            line-height: 1;
+        }
+
+        .favorite-song-embed {
+            max-width: 100%;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .favorite-song-embed iframe {
+            display: block;
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        /* Socials — только иконки */
+        .socials {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .social {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            color: #d0d0d0;
+            background: rgba(20, 20, 20, 0.55);
+            border: 2px solid rgba(255,255,255,0.18);
+            border-radius: 50%;
+            transition: border-color 0.2s ease, color 0.2s ease, transform 0.15s ease, background 0.2s ease;
+        }
+
+        .social:hover {
+            border-color: #ffffff;
+            color: #ffffff;
+            background: rgba(40, 40, 40, 0.65);
+            transform: translateY(-2px);
+        }
+
+        .social svg {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #8a8a8a;
+        }
+
+        @media (max-width: 520px) {
+            body {
+                padding: 2.5rem 1.2rem 2rem;
+            }
+
+            .container {
+                gap: 2.2rem;
+            }
+
+            .header h1 {
+                font-size: 2.8rem;
+            }
+
+            .header .intro {
+                font-size: 1.1rem;
+            }
+
+            .projects-title,
+            .skills-title,
+            .favorite-song-title {
+                font-size: 2rem;
+            }
+
+            .skills-category-name {
+                font-size: 1.3rem;
+            }
+
+            .project {
+                padding: 1.2rem 1.3rem;
+                border-radius: 16px;
+            }
+
+            .project-title {
+                font-size: 1.6rem;
+            }
+
+            .project-desc {
+                font-size: 1rem;
+            }
+
+            .skills-items {
+                font-size: 1.05rem;
+                line-height: 2;
+            }
+
+            .skill-tooltip {
+                font-size: 0.85rem;
+                padding: 0.3rem 0.7rem;
+            }
+
+            .social {
+                width: 44px;
+                height: 44px;
+            }
+
+            .social svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .avatar {
+                width: 76px;
+                height: 76px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header class="header">
+            <div class="avatar">
+                <img src="data:image/jpeg;base64,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" alt="misiori avatar">
+            </div>
+            <h1>misiori</h1>
+            <p class="intro">
+                hey, i like languages, designing and developing some stuff ^^
+            </p>
+        </header>
+
+        <div class="projects">
+            <div class="projects-title">projects</div>
+
+            <a href="https://dangerousantfarm.vercel.app" target="_blank" rel="noopener noreferrer" class="project">
+                <div class="project-title">dangerous ant farm</div>
+                <div class="project-desc">a rhythm based survival game.</div>
+            </a>
+
+            <a href="https://startorigin.me" target="_blank" rel="noopener noreferrer" class="project">
+                <div class="project-title">naisuru</div>
+                <div class="project-desc">just an ai friend.</div>
+            </a>
+        </div>
+
+        <section class="skills">
+            <div class="skills-title">skills & interests</div>
+
+            <div class="skills-category">
+                <div class="skills-category-name">skills</div>
+                <div class="skills-items">
+                    <span class="skill-word" role="button" tabindex="0">
+                        typescript
+                        <span class="skill-tooltip">50/50 with ai</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        sql
+                        <span class="skill-tooltip">im not using non-sql dbs</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        figma
+                        <span class="skill-tooltip">designing is satisfying</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <div class="skills-category-name">interests</div>
+                <div class="skills-items">
+                    <span class="skill-word" role="button" tabindex="0">
+                        languages
+                        <span class="skill-tooltip">i like it the most</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        designing
+                        <span class="skill-tooltip">im better at design than at coding</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        developing
+                        <span class="skill-tooltip">websites, games, ai, etc</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <div class="skills-category-name">languages</div>
+                <div class="skills-items">
+                    <span class="skill-word" role="button" tabindex="0">
+                        russian 🇷🇺
+                        <span class="skill-tooltip">привет!</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        serbian 🇷🇸
+                        <span class="skill-tooltip">gde ste drugari</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        english 🇬🇧
+                        <span class="skill-tooltip">hello!</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        spanish 🇪🇸
+                        <span class="skill-tooltip">learning it now</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <div class="skills-category-name">games</div>
+                <div class="skills-items">
+                    <span class="skill-word" role="button" tabindex="0">
+                        geoguessr
+                        <span class="skill-tooltip">favorite game</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        msfs 2024
+                        <span class="skill-tooltip">i like flying xD</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        rust
+                        <span class="skill-tooltip">pew pew</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        007: first light
+                        <span class="skill-tooltip">bond is my role model tbh</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        half-life 2
+                        <span class="skill-tooltip">my name is gordon freeman</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <div class="skills-category-name">music</div>
+                <div class="skills-items">
+                    <span class="skill-word" role="button" tabindex="0">
+                        electronics
+                        <span class="skill-tooltip">mostly from geometry dash</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        rap
+                        <span class="skill-tooltip">perfect for games</span>
+                    </span>
+                    ·
+                    <span class="skill-word" role="button" tabindex="0">
+                        dream rock
+                        <span class="skill-tooltip">focusing</span>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <section class="favorite-song">
+            <div class="favorite-song-title">favorite song</div>
+
+            <div class="favorite-song-embed">
+                <iframe
+                    style="border-radius:12px"
+                    src="https://open.spotify.com/embed/track/1Bh0UzthW8pKEnYg7v40Oa?utm_source=generator&theme=0"
+                    width="100%"
+                    height="152"
+                    frameBorder="0"
+                    allowfullscreen=""
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy">
+                </iframe>
+            </div>
+        </section>
+
+        <div class="socials">
+            <a href="https://discord.com/users/1555622813266874383" target="_blank" rel="noopener noreferrer" class="social" aria-label="Discord">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.03zM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+            </a>
+
+            <a href="https://open.spotify.com/user/31v62rjp5uhhgbfqtyjvz2ophpsi" target="_blank" rel="noopener noreferrer" class="social" aria-label="Spotify">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                </svg>
+            </a>
+
+            <a href="https://steamcommunity.com/profiles/76561198642012974" target="_blank" rel="noopener noreferrer" class="social" aria-label="Steam">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/>
+                </svg>
+            </a>
+
+            <a href="https://github.com/misiori" target="_blank" rel="noopener noreferrer" class="social" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                </svg>
+            </a>
+        </div>
+
+        <div class="footer">thanks for attention!</div>
+    </div>
+
+    <script>
+        // Tooltip'ы для слов
+        document.querySelectorAll('.skill-word').forEach(word => {
+            word.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                const wasActive = word.classList.contains('active');
+
+                document.querySelectorAll('.skill-word.active').forEach(w => {
+                    w.classList.remove('active');
+                });
+
+                if (!wasActive) {
+                    word.classList.add('active');
+                }
+            });
+
+            word.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    word.click();
+                }
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.skill-word')) {
+                document.querySelectorAll('.skill-word.active').forEach(w => {
+                    w.classList.remove('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
