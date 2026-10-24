@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#000000">
-  <meta name="description" content="lwk what should i say?">
+  <meta name="description" content="the personal website of misiori — languages, projects, music, and other interests.">
   <title>misiori</title>
   <link rel="icon" type="image/png" href="https://files.mastodon.social/accounts/avatars/117/455/651/686/815/164/original/820901b711ee9896.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -142,11 +142,81 @@
       margin-right: 2.6rem;
     }
 
+    /* ===== INFO ===== */
     .info-text {
       color: var(--muted);
       font-size: 1.02rem;
       line-height: 1.9;
       max-width: 360px;
+    }
+    .info-block {
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+    .info-block-title {
+      margin-bottom: .55rem;
+      color: #929292;
+      font-family: var(--sans);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .info-tags {
+      color: var(--muted);
+      font-size: .92rem;
+      font-weight: 300;
+      line-height: 2.1;
+    }
+    .sep { margin: 0 .22rem; color: #4a4a4a; }
+
+    .skill-word {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dashed rgba(255,255,255,.35);
+      color: #e8e8e8;
+      font-weight: 400;
+      cursor: pointer;
+      user-select: none;
+      transition: color .18s ease, border-color .18s ease;
+    }
+    .skill-word:hover, .skill-word.active { border-bottom-color: #fff; color: #fff; }
+    .skill-tooltip {
+      position: absolute;
+      z-index: 10;
+      bottom: calc(100% + .65rem);
+      left: 50%;
+      width: max-content;
+      max-width: min(240px, 78vw);
+      padding: .48rem .85rem;
+      transform: translate(-50%, 5px);
+      border-radius: 7px;
+      background: #f5f5f5;
+      color: #111;
+      font-size: .75rem;
+      font-weight: 400;
+      line-height: 1.5;
+      text-align: center;
+      white-space: normal;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .16s ease, transform .16s ease, visibility .16s ease;
+    }
+    .skill-tooltip::after {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #f5f5f5;
+      content: "";
+    }
+    .skill-word.active .skill-tooltip {
+      transform: translate(-50%, 0);
+      opacity: 1;
+      visibility: visible;
     }
 
     /* ===== LISTS ===== */
@@ -310,6 +380,34 @@
         <h2 class="section-title">info</h2>
       </div>
       <p class="info-text">i like linguistics, vibecoding and reading.</p>
+
+      <div class="info-block">
+        <div class="info-block-title">languages</div>
+        <div class="info-tags">
+          <span class="skill-word" tabindex="0" role="button" aria-expanded="false">русский 🇷🇺<span class="skill-tooltip">привет!</span></span><span class="sep">·</span>
+          <span class="skill-word" tabindex="0" role="button" aria-expanded="false">srpski 🇷🇸<span class="skill-tooltip">šta očekuješ</span></span><span class="sep">·</span>
+          <span class="skill-word" tabindex="0" role="button" aria-expanded="false">english 🇬🇧<span class="skill-tooltip">i'm always here...</span></span><span class="sep">·</span>
+          <span class="skill-word" tabindex="0" role="button" aria-expanded="false">español 🇪🇸<span class="skill-tooltip">aprendo, quiero hablar con fluidez</span></span>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-title">music</div>
+        <div class="info-tags">
+          <span class="skill-word" tabindex="0" role="button" aria-expanded="false">electronic<span class="skill-tooltip">mostly from newgrounds</span></span><span class="sep">·</span>
+          <span class="skill-word" tabindex="0" role="button" aria-expanded="false">rap<span class="skill-tooltip">for games</span></span><span class="sep">·</span>
+          <span class="skill-word" tabindex="0" role="button" aria-expanded="false">dream rock<span class="skill-tooltip">for relaxing and focusing</span></span>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-title">games</div>
+        <div class="info-tags">
+          <span class="skill-word" tabindex="0" role="button" aria-expanded="false">geoguessr<span class="skill-tooltip">favourite game</span></span><span class="sep">·</span>
+          <span class="skill-word" tabindex="0" role="button" aria-expanded="false">msfs 2024<span class="skill-tooltip">i like flying</span></span><span class="sep">·</span>
+          <span class="skill-word" tabindex="0" role="button" aria-expanded="false">007: first light<span class="skill-tooltip">james bond is my role model</span></span>
+        </div>
+      </div>
     </div>
 
     <!-- PROJECTS -->
@@ -448,16 +546,50 @@
       });
     });
 
+    // skill tooltips
+    document.querySelectorAll(".skill-word").forEach(word => {
+      function toggleTooltip() {
+        const willOpen = !word.classList.contains("active");
+        document.querySelectorAll(".skill-word.active").forEach(openWord => {
+          openWord.classList.remove("active");
+          openWord.setAttribute("aria-expanded", "false");
+        });
+        if (willOpen) {
+          word.classList.add("active");
+          word.setAttribute("aria-expanded", "true");
+        }
+      }
+      word.addEventListener("click", toggleTooltip);
+      word.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          toggleTooltip();
+        }
+      });
+    });
+
+    document.addEventListener("click", event => {
+      if (!event.target.closest(".skill-word")) {
+        document.querySelectorAll(".skill-word.active").forEach(word => {
+          word.classList.remove("active");
+          word.setAttribute("aria-expanded", "false");
+        });
+      }
+    });
+
     document.addEventListener("keydown", event => {
       if (event.key === "Escape") {
         modals.forEach(modal => {
           if (modal.classList.contains("open")) closeModal(modal);
         });
+        document.querySelectorAll(".skill-word.active").forEach(word => {
+          word.classList.remove("active");
+          word.setAttribute("aria-expanded", "false");
+        });
         showSection("home");
       }
     });
 
-    // Initial section from hash
     const initial = location.hash.replace("#", "");
     if (["info", "projects", "socials"].includes(initial)) showSection(initial);
     else showSection("home");
