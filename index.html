@@ -69,6 +69,35 @@
     }
 
     /* ===== HOME ===== */
+    .news-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .5rem 1.15rem;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 8px;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .03em;
+      cursor: pointer;
+      transition: color .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .news-btn:hover {
+      color: #000;
+      border-color: #fff;
+      background: #fff;
+    }
+    .news-btn .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      flex: 0 0 auto;
+    }
+    .news-btn:hover .dot { background: #000; }
+
     .avatar {
       width: 96px;
       height: 96px;
@@ -342,6 +371,36 @@
     }
     .modal-btn:hover { background: transparent; color: #fff; }
 
+    /* ===== NEWS ===== */
+    .news-list {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+    .news-item {
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+      padding: .85rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #111;
+    }
+    .news-headline {
+      color: var(--text);
+      font-size: .95rem;
+      font-weight: 500;
+    }
+    .news-date {
+      color: var(--muted);
+      font-size: .8rem;
+      text-decoration: none;
+      width: fit-content;
+      border-bottom: 1px dashed rgba(255,255,255,.35);
+      transition: color .18s ease, border-color .18s ease;
+    }
+    .news-date:hover { color: #fff; border-bottom-color: #fff; }
+
     @media (max-width: 480px) {
       .name { font-size: 3rem; }
       .section-title { font-size: 2.1rem; }
@@ -362,6 +421,10 @@
 
     <!-- HOME -->
     <div class="section visible" id="section-home">
+      <button class="news-btn" type="button" data-modal="news" aria-haspopup="dialog">
+        <span class="dot" aria-hidden="true"></span>
+        geodocs released!
+      </button>
       <div class="avatar">
         <img src="https://files.mastodon.social/accounts/avatars/117/455/651/686/815/164/original/820901b711ee9896.png" alt="misiori's avatar">
       </div>
@@ -416,12 +479,11 @@
         <button class="back-btn" type="button" data-back>← back</button>
         <h2 class="section-title">projects</h2>
       </div>
-        <div class="list">
+      <div class="list">
         <button class="list-item" type="button" data-modal="geodocs">
           <span>geodocs</span>
           <span class="arrow">↗</span>
         </button>
-      <div class="list">
         <button class="list-item" type="button" data-modal="lexicon">
           <span>lexicon</span>
           <span class="arrow">↗</span>
@@ -475,6 +537,19 @@
   </div>
 
   <!-- MODALS -->
+  <div class="modal-overlay" id="modal-news" role="dialog" aria-modal="true" aria-labelledby="news-title" aria-hidden="true">
+    <div class="modal">
+      <button class="modal-close" type="button" data-close aria-label="close news">×</button>
+      <h2 class="modal-title" id="news-title">news</h2>
+      <div class="news-list">
+        <div class="news-item">
+          <span class="news-headline">geodocs released!</span>
+          <a class="news-date" href="https://docsgg.github.io/" target="_blank" rel="noopener noreferrer">30/10/2026</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="modal-lexicon" role="dialog" aria-modal="true" aria-labelledby="lexicon-title" aria-hidden="true">
     <div class="modal">
       <button class="modal-close" type="button" data-close aria-label="close project details">×</button>
@@ -501,20 +576,13 @@
       <a class="modal-btn" href="https://startorigin.me" target="_blank" rel="noopener noreferrer">take me there</a>
     </div>
   </div>
-      <div class="modal-overlay" id="modal-geodocs" role="dialog" aria-modal="true" aria-labelledby="geodocs-title" aria-hidden="true">
+
+  <div class="modal-overlay" id="modal-geodocs" role="dialog" aria-modal="true" aria-labelledby="geodocs-title" aria-hidden="true">
     <div class="modal">
       <button class="modal-close" type="button" data-close aria-label="close project details">×</button>
       <h2 class="modal-title" id="geodocs-title">geodocs</h2>
       <p class="project-desc">geodocs (or docsgg) is a community-made complete geoguessr guide made by best guide makers of the game community.</p>
       <a class="modal-btn" href="https://docsgg.github.io/" target="_blank" rel="noopener noreferrer">take me there</a>
-    </div>
-  </div>
-          <div class="modal-overlay" id="modal-pipadv" role="dialog" aria-modal="true" aria-labelledby="pipadv-title" aria-hidden="true">
-    <div class="modal">
-      <button class="modal-close" type="button" data-close aria-label="close project details">×</button>
-      <h2 class="modal-title" id="pipadv-title">geodocs</h2>
-      <p class="project-desc">pip's adventures is a quiet platformer game where u play for a character left in the notebook.</p>
-      <a class="modal-btn" href="https://pipadv.vercel.app/" target="_blank" rel="noopener noreferrer">take me there</a>
     </div>
   </div>
 
